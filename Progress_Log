@@ -1,0 +1,211 @@
+Progress_Log
+2-4: Cleaning up Javadoc comments -- doing them for EntryInfo items, did through ClaimPlayEntryInfo.
+Also: Need to check that correct play options are being produced for America and Europe game by PlayFinder. Write test first! Then rewrite code as needed.
+
+1-29: America is producing results but when log is put to XML, no FinalScoringEntry.
+Maybe write a couple of tests on Scoring then prepare to publish.
+
+1-28: Did most of coordinate location implementation, but need to add coordinates at creation of America cities.
+
+TODO:
+- figure out new things to be tested:
+	- ...can't think of any?
+
+TODO:
+- create some new tests
+- create Entry tests
+- add some more documentation
+
+1-27: New list of finalization todo:
+- create some new tests
+- create Entry tests
+- add some more documentation
+
+1-26: Score calculator is a mess. Trying to use ScoreCalculator as base class and EuroScoreCalculator as derived from it.
+
+1-25: Left many classes relating to America a mess. Finally decided to implement it so that AmericaGameEntry is it's own stub version of GameEntry, even
+though it adds no new information/fields. Now should make all other com.underplex.tickay.info classes/entry classes work with that idea.
+
+1-23:
+
+Now it's polishing time:
+1. Fix the simulation runner so it can do both Europe and America. Make it more generic by extending from base class.
+2. Implement AmericaGame and all the appropriate stuff there.
+3. Create some new tests for AmericaGame.
+4. Create some new tests for "Entry" reading, etc. Try and *fail* to get information you're not supposed to have access to.
+5. Look at how things are published/organized on GitHub.
+
+1-22: Think I figured out how to do EntryInfoMe scheme...
+
+Implement PlayEntryInfo for all appropriate Info and InfoMe classes.
+
+Implement MySource<> for DrawEntry and TicketEntry play classes.
+
+Create "conditional delivery" for TurnEntryInfoMe to access myInfo versions of com.underplex.tickay.info classes (already done for ClaimRoute com.underplex.tickay.play).
+
+1-22: How to do GameEntryInfoMe?
+
+-Attach myInfo() to player or game? Probably player, because then he'll always have reference to it.
+Probably pass a parameter to the constructor of -InfoMe along with the the parameter of the GameEntry itself.
+So EuroGameEntryInfoMe(EuroGameEntry ege, PlayerType pt) as field assignment in PlayerInfoMe.
+Then, EuroGameEntryInfoMe always has reference to the player it can "unlock" without having to pass anything else.
+
+How does EuroGameEntryInfoMe work, given the PlayerType it should "unlock"?
+
+When it serves up a thing that may have a "-Me" form, it searches for the "-Me" version depending on the PlayerType.
+
+1-21: TODO: 
+1. Make Game have American values as defaults (then implementing USGame will be easy)
+2. Figure out how to serve up GameEntry com.underplex.tickay.info and GameEntryInfoMe classes.
+
+1-21: TODO: 
+1. Make Game have American values as defaults (then implementing USGame will be easy)
+2. check XSD one more time, then regenerate
+3. for each entry, add implements ~Info classes (and ~InfoMe) as needed, add fields and add methods
+	(remember, Player will now have it's own log manager to take care of this stuff)
+
+Differences between US and Europe:
+
+Europe com.underplex.tickay.player have stations, score stations at end, can use stations to finish tickets at end.
+America com.underplex.tickay.player get just 3 tickets at beginning of game.
+
+1-20: TODO: 1. add constants so that Game simply deals cards/constants as needed
+2. change setup so that Longs are not dealt for regular com.underplex.tickay.game
+3. check XSD one more time, then regenerate
+4. for each entry, add implements ~Info classes (and ~InfoMe) as needed, add fields and add methods
+	(remember, Player will now have it's own log manager to take care of this stuff)
+
+1-17: Need to rethink how EuroPlayerInfo and PlayerInfo interact. Can EuroPlayerInfo just extend PlayerInfo and use it's methods? Or will that create some kind of mutability problem?
+
+1-16: Proceeding with strategy of making EuroGame inherit from abstract Game a lot of the methods it needs. This means EuroGame and AmericaGame will be very similar,
+but won't need to return the same kind of Game simulation (since they are, in fact, different com.underplex.tickay.game anyway).
+
+Need to continue editing both EuroGame and Game so that all the inheritance works correctly, especially because all places of Player are now
+generic (Player<E> with E being the interface for the needed strategy).
+
+1-16: Created new EuroGameEntry extending GameEntry. Now...what general approach do I use to reuse the code running parts of Game for use in EuroGame?
+Should EuroGame inherit non-static methods? Should Game just have a lot of static methods that operate on Entry?
+
+What are the implications of changing the type passed to, for instance, PhaseManager, to something more generic? Not too bad. Why would phase manager
+care what kind of thing it is? And it can always look back at the expansions to perform a special way; it doesn't need to do much.
+
+Probably EuroGame should just inherit static methods, because then changes to it can be reflected in many parts of the game.
+In fact, Board, Trains, Tickets will all work (more or less) the same way between America/Europe, so it's really just com.underplex.tickay.player that works a bit differently,
+and even then, not for much of the questions.
+
+1-16: Largely created infrastructure for entries-based-on-entries. But how to return correct SimulationLog and Game entry type?
+
+The com.underplex.tickay.simulator engine runs game specific stuff.
+
+// what are differences between America and Europe? How to handle?
+
+They need to produce different kinds of entry files when they run.
+Can solve this by declaring them as Play<GameEntry>
+That don't seem like a good idea. Instead, why not have EuroGame just extend game's abstract classes/methods? And America?
+You can just do a basic thing...
+
+Other issues... 
+Number of cards handed out -- dealt with by constant created at construction
+No station play -- dealt with by PlayFinder
+No station scoring -- dealt with by FinalScoring
+
+1-16: Created EntryInfo wrappers, now create delegate methods for them using Eclipse tool
+Still need to add "implements Source<....Info> to the Entry files when their final version is created
+
+1-14: Okay, pumped out log-generalization. Still TODO:
+
+1. Make wrappers using auto-generation for JAXB classes so that we can pass them to the game. This will mean learning about auto-generating code.
+2. Fiddle with Game building so that you can pump out America com.underplex.tickay.game just as easily as Europe com.underplex.tickay.game.
+3. Redo the city construction so that cities are given coords when constructed (for references' sake).
+4. Publish on GitHub!
+
+1-14: Specification generalizing done! Made specification generic for all com.underplex.tickay.game (moved to UnderplexTools) and made EuroSimulationLog pump out
+EuroSimulationLog elements. If need be, in the future we can make more generic simulation runners, but I found it too complicated to do right now and
+this will do fine. In fact, in general, as long as we produce com.underplex.tickay.game that have XML that is consistent for a single game, it won't really matter *HOW* we run
+them. 
+
+1-14: How should the simulation running work?
+
+Well, we need output of some kind of SimulationLog, but to get the log into an XML form, we need to know what XSD file to use.
+
+That can just be a matter of record -- specifying somewhere that "EuroTickay_v6.XSD" is needed to encode the object to file.
+
+
+Parts:
+
+--Running the simulation. Output: EuroSimulationLog.
+	-- ran out of time on making this efficiently...really I just need a runner that produces EuroSimulationLog...
+	-- I can make Specification generic, though, by making E any acceptable strategy
+
+--Writing to XML file. Output:[none; writes to file] Requires XSD as parameter.
+--Importing from XML file. Output: EuroSimulationLog. Requires XSD as parameter.
+
+1-13: Need to rethink whole Specification thing; should redo it as a simple building or factory pattern
+	
+1-12: Thinking about how to generalize from just Europe to Europe, America, and other expansions.
+Part of this issue is reusing the SimulationLog stuff, but first I need to understand how to use interlocking XSD files so
+that I can separate the use of SimulationLog -- which ought to be useful for other com.underplex.tickay.game -- from the specific game.
+
+...If I successfully do this, I'll have some nice reusable code that runs com.underplex.tickay.game of any kind and pumps out an appropriate SimulationLog (given an XSD for a particular game).
+
+First step: Make SimulationLog without any details on what GameEntry types it holds.
+
+Then import it into the XSD of the current game type.
+Then extend it so that it includes game entries of appropriate type for whatever you're doing.
+
+1-7: Weird situations I still haven't tested:
+I can't think of any...
+
+1-7: Got done with much documentation of -com.underplex.tickay.info objects, stopped at RouteManagerInfo.
+
+1-6: Need to rethink how stations/station choices work -- what if I add a station to a non-existent network, then add a route that connects to an existing network? Connects two networks?
+
+1-4: Doing FinalScoringTest3...need to deal with multiple paths that are actually equals being returned to master path list
+
+1-4: Doing FinalScoringTest1...need to check that final scoring works properly. Test it by checking various loops and long tracks to see if it comes up
+with correct answer for "longest" track and evaluates tickets correctly. Choose some tickets to see if it evaluates correctly.
+
+12-24: Double check two things about board: 1. number of routes doesn't agree with spreadsheet download -- check agains board. 2. Is Wien-Budapest route orange or red?
+
+12-23: Working on EqualsTests for all the equals I've written, but really I need to go through and check that all the routes have been added 
+-- some seem to be missing. Total count is 99, per a spreadsheet. I can just print then do a check list.
+
+12-20: Keep working on SimpleTests2.
+
+12-18: Look back over TakeTrainsPlay resolve and especially how it refills Faceups. (The schema has been updated and the JAXB class needs to be redone.)
+
+12-18: First problem: Faceups don't look like they're being refreshed when people take them. Second problem: When the whole sim runs, gets hung on payment finding, seemingly because there are near-infinite trains
+in the train hands of com.underplex.tickay.player. 
+Solution to both: Review all resolve methods for Plays.
+
+12-17: Review all payment finding code; it looks like it's currently taking a long time and probably has an infinite loop somewhere
+
+12-9: I *seem* to be free of compiler bugs, so I'm thinking up junit tests.
+
+For game, we need to make sure it moves through the game normally. We also need to make sure individual com.underplex.tickay.player all work okay.
+
+12-9: Redid tunneling xml, so need to regenerate.
+
+12-7: Revising PaymentCalculator
+12-2: Revise PlayFinder and kill any more basic compile errors.
+12-1-15: Need to order the SetMaker set making so that cities are returned roughly in west-east order, then change CityPair so it automatically puts the western
+city as city1.
+
+11-29-15: Why is Hand a part of Payment? Not clear if it's important or not.
+Two questions about Payment: 1) Why have Hand be part of the payment? It shouldn't be, I've redone.
+				2) Can I make this just an com.underplex.tickay.info object? -- No, payments need to be set differently sometimes and should actually not be final as marked
+				3) Should the last two methods be included in this? They don't seem appropriate. 
+
+11-28-15: One of the only things you can/need to do to the Entry JAXB files is to make the com.underplex.tickay.play entry classes implement PlayEntry (a marker interface)
+
+11-25-15: Going line-by-line through Game to fix things that need fixing. Changed general system so that Play extends ISource<PlayInfo>, and lower Play-implementing objects in the hierarchy just return PlayInfo for their
+com.underplex.tickay.info() method; they can give more detailed com.underplex.tickay.info after they are downcast to a more specific type.
+
+11-24: Decided to change system so that city identities are no longer tied to enum values. This is because then I have to continually create new lists of enums 
+for each expansion, etc. Fixed BoardFactory to reflect this. Continue editing code by "stepping" manually through code.
+
+7-29: https://access.redhat.com/documentation/en-US/Red_Hat_JBoss_Fuse/6.0/html/Developing_Applications_Using_JAX-WS/files/JAXWSAnyElementMapping.html
+		-- has a good summary of how to use <any> elements to fit in various/random elements into the schema/XML
+7-23: Doing routemanager -- managing networks so that station decisions are easier -- next do station determinations
+7-22: Working on DrawPlay (should be refactored to be TakeTrainPlay)
+

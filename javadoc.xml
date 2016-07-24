@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="javadoc">
+    <target name="javadoc">
+        <javadoc access="public" additionalparam=" -stylesheetfile C:\Users\irvin_000\workspace\Tickay\src\stylesheet_tickay.css com.underplex.tickay " author="true" classpath="C:\RepastSimphony-2.3.1\eclipse\plugins\org.hamcrest.core_1.3.0.v201303031735.jar;../UnderplexTool/bin;C:\RepastSimphony-2.3.1\eclipse\plugins\org.junit_4.11.0.v201303080030\junit.jar;C:\Users\irvin_000\CodeModel\codemodel-2.5.jar" destdir="doc" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" overview="C:\Users\irvin_000\workspace\Tickay\src\overview.html" packagenames="com.underplex.info,com.underplex.tool,com.underplex.tickay.simulator,com.underplex.tickay.game,com.underplex.tickay.util,com.underplex.tickay.jaxbinfo,com.underplex.tickay.strategy,com.underplex.tickay,com.underplex.tickay.test,com.underplex.tickay.jaxb,com.underplex.tickay.play,com.underplex.tickay.player,com.underplex.tickay.info" source="1.7" sourcepath="src;../UnderplexTool/src" splitindex="true" use="true" version="true">
+            <link href="file:/C:/Users/irvin_000/workspace/Tickay/doc/"/>
+        </javadoc>
+    </target>
+</project>

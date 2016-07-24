@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:include schemaLocation="SimulationLogging.xsd"/> 
+
+	<!-- Rather than create a complex type for routes and tickets, these are represented by strings, with the end cities separated by a delimiter.-->
+	<!-- For a quick way to keep the identity of com.underplex.tickay.player clear, we use their 
+		seating position as their ID. For mnemonic purposes, we give the seats 1-5 
+		alphabetical names. -->
+	<xs:simpleType name="PlayerType"> <!-- These represent the first through fifth com.underplex.tickay.player. -->
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="APU" />
+			<xs:enumeration value="BARNEY" />
+			<xs:enumeration value="CARL" />
+			<xs:enumeration value="DUFFMAN" />
+			<xs:enumeration value="EDNA" />
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:simpleType name="PlayType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="TAKE_TRAINS" />
+			<xs:enumeration value="DRAW_TICKETS" />
+			<xs:enumeration value="CLAIM_ROUTE" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="TrainType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="BLACK" />
+			<xs:enumeration value="BLUE" />
+			<xs:enumeration value="RED" />
+			<xs:enumeration value="YELLOW" />
+			<xs:enumeration value="PURPLE" />
+			<xs:enumeration value="WHITE" />
+			<xs:enumeration value="GREEN" />
+			<xs:enumeration value="ORANGE" />
+			<xs:enumeration value="GRAY" />
+			<xs:enumeration value="LOCO" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:complexType name="StrategyErrorEntry">
+		<xs:sequence>
+			<xs:element name="strategyClass" type="xs:string" />
+			<xs:element name="strategyError" type="StrategyErrorType" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<!-- Each represents one of the choices a strategy makes, to indicate that 
+		the strategy didn't make a legal choice. -->
+	<xs:simpleType name="StrategyErrorType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="FIRST_DISCARD_CHOICE" />
+			<xs:enumeration value="REGULAR_TURN_CHOICE" />
+			<xs:enumeration value="SECOND_CARD_CHOICE" />
+			<xs:enumeration value="TICKET_CHOICE" />
+			<xs:enumeration value="TUNNEL_CHOICE" />
+			<xs:enumeration value="STATION_COVERAGE_CHOICE" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:complexType name="FirstDiscardEntry"> 
+		<xs:sequence>
+			<xs:element name="player" type="PlayerType" />
+			<xs:element name="firstDiscardChoiceError" type="StrategyErrorEntry"
+				minOccurs="0" />
+			<xs:element name="keep" type="xs:string" minOccurs="0"
+				maxOccurs="unbounded" />
+			<xs:element name="discard" type="xs:string" minOccurs="0"
+				maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="TurnEntry">
+		<xs:sequence>
+			<xs:element name="turn" type="xs:int" />
+			<xs:element name="player" type="PlayerType" />
+			<xs:element name="playType" type="PlayType" />
+			<xs:choice>
+				<xs:element name="claimRoute" type="ClaimRouteEntry" />
+				<xs:element name="drawTickets" type="DrawTicketsEntry" />
+				<xs:element name="takeTrains" type="TakeTrainsEntry" />
+				<xs:element name="buildStation" type="BuildStationEntry" />
+			</xs:choice>
+			<xs:element name="error" type="StrategyErrorEntry"
+				minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="ClaimRouteEntry">
+		<xs:sequence>
+			<xs:element name="player" type="PlayerType" />
+			<xs:element name="route" type="xs:string" />
+			<xs:element name="payment" type="TrainType"
+				minOccurs="0" maxOccurs="unbounded" /> <!--  may not actually be paid if this is a tunnel that isn't built -->
+			<xs:element name="tunneling" type="TunnelingEntry"
+				minOccurs="0" /> <!--  Only present if this is a tunnel; may mean that base payment isn't paid. -->
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="TunnelingEntry">
+		<xs:sequence>
+			<xs:element name="additionalTurnedUp" type="DeckDrawEntry"
+				minOccurs="0" maxOccurs="unbounded" /> <!-- Card turned up that may cause further cost. -->
+			<xs:element name="additionalRequired" type="xs:int"
+				minOccurs="0" /> <!--  Total number of additional cards required. -->
+			<xs:element name="canPay" type="xs:boolean"			
+				minOccurs="0" /> <!-- True if player can pay for additional cost. If false, nothing else matters.-->
+			<xs:element name="doesPay" type="xs:boolean"			
+				minOccurs="0" /> <!-- True only if the strategy can and does choose to pay. If canPay = true and doesPay = false, tunnel goes unbuilt. -->
+			<xs:element name="spentForAdditional" type="TrainType"
+				minOccurs="0" maxOccurs="unbounded" /> <!-- Further cost paid. -->
+			<xs:element name="error" type="StrategyErrorEntry"
+				minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="TakeTrainsEntry"> <!-- Represents entire turn. -->
+		<xs:sequence>
+			<xs:element name="player" type="PlayerType" />
+			<xs:element name="take1" type="SingleTakeEntry" minOccurs="0" />
+			<xs:element name="take2" type="SingleTakeEntry" minOccurs="0" />
+			<xs:element name="error" type="StrategyErrorEntry"
+				minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="SingleTakeEntry">
+		<xs:sequence>
+			<xs:element name="faceUpOffered" type="TrainType"
+				minOccurs="0" maxOccurs="5" /> <!-- FaceUp cards available at beginning of turn. -->
+			<xs:element name="deckTaken" type="DeckDrawEntry"
+				minOccurs="0" />
+			<xs:element name="faceUpTaken" type="TrainType" minOccurs="0" /> <!-- Only this or deckTaken will appear, not both. -->
+			<xs:element name="faceUpRevealed" type="DeckDrawEntry"
+				minOccurs="0" /> <!-- The card revealed by taking a card, if any. -->
+			<xs:element name="wipe" type="WipeEntry" minOccurs="0"
+				maxOccurs="unbounded" /> <!-- replacement if a turn over shows 3 locos, causing reset. -->
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="DeckDrawEntry"> <!-- Represents removing top deck card. Reshuffle is true if this happened 
+			just after a reshuffle. --> 
+		<xs:sequence>
+			<xs:element name="cardToDraw" type="xs:boolean" /> <!-- True if a card is drawn this way. -->
+			<xs:element name="trainType" type="TrainType" minOccurs="0"/> <!-- Missing only if there is no card to draw. -->
+			<xs:element name="reshuffle" type="xs:boolean" minOccurs="0"/> <!-- Present if a card was drawn; true if drawing a card was preceded by reshuffle transferring discard to deck. -->
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="WipeEntry"> <!-- Replacement cards if the faceup cards are "wiped", that is, all replaced 
+			b/c of 3 locos. If none given, deck is effectively broken,
+			with either too few cards to replace or too many locos to put down five w/o a loco. -->
+		<xs:sequence>
+			<xs:element name="faceUpReplacement" type="DeckDrawEntry"
+				minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="BuildStationEntry">
+		<xs:sequence>
+			<xs:element name="player" type="PlayerType" />
+			<xs:element name="stationNumber" type="xs:int" /> <!-- The 1, 2, 3 number for this player. -->
+			<xs:element name="stationLocation" type="xs:string" /> <!-- The location of this station. -->
+			<xs:element name="spentForStation" type="TrainType"
+				minOccurs="0" maxOccurs="unbounded" /> <!-- cards spent to build station -->
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="DrawTicketsEntry">
+		<xs:sequence>
+			<xs:element name="player" type="PlayerType" />
+			<xs:element name="keptTicket" type="xs:string"
+				minOccurs="1" maxOccurs="3" />
+			<xs:element name="returnedTicket" type="xs:string"
+				minOccurs="0" maxOccurs="2" />
+			<xs:element name="noTicketsToTake" type="xs:boolean"
+				minOccurs="0" /> <!-- Only occurs if the ticket pile is literally empty. -->
+			<xs:element name="error" type="StrategyErrorEntry"
+				minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="StationChoiceEntry">
+		<xs:sequence>
+			<xs:element name="player" type="PlayerType" />
+			<xs:element name="stationCity" type="xs:string" />
+			<xs:element name="noAvailableRoutes" type="xs:boolean"
+				minOccurs="0" /> <!-- If present, true, then no routes were available to use. -->
+			<xs:element name="availableRoutes" type="xs:string"
+				minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="chosenRoute" type="xs:string" minOccurs="0" />
+			<xs:element name="error" type="StrategyErrorEntry"
+				minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="EuroGameEntry">
+		<xs:sequence>
+			<xs:element name="setup" type="SetupEntry"/>
+			<xs:element name="firstDiscard" type="FirstDiscardEntry" maxOccurs="unbounded" />
+			<xs:element name="turn" type="TurnEntry" maxOccurs="unbounded" />
+			<xs:element name="stationChoice" type="StationChoiceEntry"
+				minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="finalScoring" type="FinalScoringEntry"
+				maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<!-- Begin parts of GameEntry -->
+
+	<xs:complexType name="SetupEntry">
+		<xs:sequence>
+			<xs:element name="numberOfPlayers" type="xs:int" />
+			<xs:element name="playerDefinition" type="PlayerDefinitionEntry"
+				maxOccurs="unbounded" />
+			<xs:element name="setupPlayer" type="SetupPlayerEntry" maxOccurs="unbounded" /> 
+			<xs:element name="wipe" type="WipeEntry" minOccurs="0"
+				maxOccurs="unbounded" /> <!-- Any wipes that occurred trying to set-up train face-ups -->
+			<xs:element name="initialFaceUp" type="TrainType"
+				minOccurs="5" maxOccurs="5" /> <!-- Initial face-up trains. -->
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="SetupPlayerEntry">
+		<xs:sequence>
+			<xs:element name="player" type="PlayerType"/>
+			<xs:element name="ticket" type="xs:string" maxOccurs="unbounded"/>
+			<xs:element name="train" type="DeckDrawEntry" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="FinalScoringEntry">
+		<xs:sequence>
+			<xs:element name="player" type="PlayerType" />
+			<xs:element name="strategyClass" type="xs:string" />
+			<xs:element name="regularPoints" type="xs:int" /> <!-- Points before ticket counting. -->
+			<xs:element name="ticketPoints" type="TicketPointsEntry"
+				minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="stationPoints" type="xs:int" />
+			<xs:element name="longestTrack" type="PathEntry"
+				minOccurs="0" maxOccurs="unbounded" /> <!-- If any present, means they won longest track with these. -->
+			<xs:element name="finalScore" type="xs:int" />
+			<xs:element name="winner" type="xs:boolean" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<!-- Begin parts of FinalScoringEntry -->
+
+	<xs:complexType name="TicketPointsEntry">
+		<xs:sequence>
+			<xs:element name="route" type="xs:string" />
+			<xs:element name="points" type="xs:int" />
+			<xs:element name="completed" type="xs:boolean" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="PathEntry">
+		<xs:sequence>
+			<xs:element name="route" type="xs:string" minOccurs="0"
+				maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<!-- End parts of FinalScoringEntry -->
+
+	<xs:complexType name="PlayerDefinitionEntry">
+		<xs:sequence>
+			<xs:element name="playerType" type="PlayerType" />
+			 <!-- Remember PlayerType also defines where someone sits. That's the definition 
+				of who they are in the game.-->
+			<xs:element name="strategyClassName" type="xs:string"/>
+			<xs:element name="strategyToString" type="xs:string"/>
+		</xs:sequence>		 
+	</xs:complexType>
+	
+	<xs:complexType name="EuroSimulationLog">
+	  	<xs:complexContent>
+	    	<xs:extension base="SimulationLog">
+	      		<xs:sequence>
+	        		<xs:element name="euroGameEntry" type="EuroGameEntry" maxOccurs="unbounded"/>
+	      		</xs:sequence>
+	    	</xs:extension>
+  		</xs:complexContent>
+  	</xs:complexType>
+  		
+</xs:schema>			
+				
+				
+				
+				
+				
+				
+				
+				

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+The Tickay project provides classes for testing user-defined strategies by fully simulating the board game Ticket to Ride using those strategies.
+<h1>Introduction</h1>
+The purpose of the Tickay project is to provide a platform for the testing of strategies in Ticket to Ride that can use any and all information about the game state
+and even the history of the current game to make decisions, much as a human player would.
+<p>
+One of the most important features of this approach is that all legal plays are offered to players, not just the plays
+that seem intelligent. The simulator just determines all legal plays and passes them all to the strategy class to choose from.
+<p>
+Also, the entire game is modeled, so there is no part of the game state that isn't accounted for or is "abbreviated." In practice, this means
+the single instance modeling the current game state (<code>AmericaGame</code> or <code>EuroGame</code> are 
+currently implemented) has many helper classes
+that manage its parts, as do the <code>AmericaPlayer</code> and <code>EuropePlayer</code> classes. The effort is to make a complete simulation of the board game.
+<h1>Typical Use Case</h1>
+The typical case will be writing strategies for a version of the game (either Europe or the base game, "America"), then writing a short class specifying how
+the simulator should use the strategies, and then actually running the simulation to produce a log of the game played. Finally, the log created can be analyzed as is or exported to
+XML.
+<h3>Write <code>Strategy</code>-implementing classes</h3>
+<p>
+Each strategy represents the strategy of a given player, and the methods of an interface extending <code>Strategy</code> represent all the decisions that need to be made.
+So, for example, a class implementing <code>EuroStrategy</code> can make decisions in-game for a game of Ticket to Ride Europe.
+<p>
+The methods of the strategy are used to make decisions for the game being played. Parameters passed to the methods of a <code>Strategy</code> have two purposes:
+<ul> 
+<li>First, they provide information about current game state.</li>
+<li>Second, they provide a list or set of legal options, except when the decision can be made more simply.</li>
+</ul>
+<h3>Write a <code>Specification</code>-implementing class</h3>
+<p>
+A <code>Specification</code>-implementing class takes a generic <code>T</code> representing the kinds of strategies to be employed in a simulation.
+<p>
+For example, create a class implementing <code>Specification&lt;EuroStrategy&gt;</code> to provide details on a set of strategies to simulate in 
+games of Ticket to Ride Europe.
+<p>
+Note that you will have to make sure the <code>Strategy</code> class passed as a generic argument to <code>Specification</code> needs to be appropriate for the 
+version of the game you're simulating. For example, using <code>Specification&lt;AmericaStrategy&gt;</code> with 
+the <code>EuroSimulator</code> has no determined behavior (and shouldn't, really). 
+<h3>Run the simulator and produce a log</h3>
+Continuing the Ticket to Ride Europe example,
+<pre>
+<code>
+Specification&lt;EuroStrategy&gt; euroSpec = new MySpec&lt;EuroStrategy&gt;();
+EuroSimulator mySim = new EuroSimulator( euroSpec );
+EuroSimulationLog log = mySim.run();
+</code>
+</pre>
+<p>
+<code>EuroSimulationLog</code> conforms to EuroTickayData_v9.xsd (as of January 2016, the latest schema) and should be writable to an XML file.
+Along with some metadata, this is mostly a <code>List</code> of <code>EuroGameEntry</code> instances, each one representing the full record of a game simulated.
+<h3>Exporting (and later importing) the log</h3>
+You now have two options for analyzing the results of the simulation: First, you can write classes/methods to analyze
+the <code>SimulationLog</code> and all the games it contains. Second, you can output the log to XML using existing marshalling tools.
+<p>
+<pre>
+<code>
+String fileLocation = FileIO.outputFile(eurolog, "C:\\Users\\irvin_000\\workspace\\Tickay\\xml_output\\");
+</code>
+</pre>
+Files can be stored for later import, which would look like this:
+<pre>
+<code>
+SimulationLog euroLog = FileIO.inputFile(fileLocation);
+</code>
+</pre>
+<h2>No Thread-Safety</h2>
+None of Tickay's classes are thread-safe and it hasn't been written with that in mind. A single simulation might take about 1 minute to run, and you will be much more likely to spend time 
+interpreting and analyzing the resulting data than actually running simulations, at least as currently imagined.
+<p>
+Moreover, the classes were not written to be used to play games against live opponents, so no support is offered for that possibility.
+<h1>Immutability and Insulating the Simulator from Malicious Strategies</h1>
+<p>
+This project had two goals that are somewhat hard to simultaneously implement:
+First, users should want to implement their own strategy classes that use information about the current game state, ideally just as much information as they would have actually playing the game.</li>
+However, another priority is that the simulator must provide information about the game state but can't allow user-defined classes to change anything about the game state.
+<p>
+The simulator achieves both of these by changing the mutable game state objects that model the game (for example, <code>EuroGame</code> 
+and <code>EuroPlayer</code>) but, when using methods
+implemented by <code>Strategy</code> classes, only passing immutable objects to the <code>Strategy</code>'s methods.
+All the object instances passed are either <code>-Info</code> or <code>-InfoMe</code> classes,
+meaning they are immutable.
+<p>
+The simulator prevents <code>Strategy</code> classes from changing the game state with three tactics:
+<ul>
+<li>Only immutable classes are passed to <code>Strategy</code> classes.</li>
+<li>The simulator never uses pointers to objects that it hasn't generated itself (so malicious code can't pass references to objects it created itself).</li>
+<li>Any <code>Collection</code>s passed are defensively copied beforehand.</li>
+</ul>
+<p>
+<h2>-Info and -InfoMe classes</h2>
+Classes with <code>-Info</code> wrap the actual, "live" objects used to model the game state and only provide information available to everyone in the game.
+<p>
+They don't have setters and only return other <code>-Info</code> objects. Additionally, any <code>Collection</code> they return from a getter is a copy of an internal list (if the list is even in <code>-Info</code>).
+<p>
+When strategies return an <code>-Info</code> that represents a game element, that element needs to be necessarily part of a list passed, otherwise,
+the simulator shouldn't accept it as or act on it. (This way, child classes of immutable objects can't be used to change the game state.)
+<p>
+Classes with <code>-InfoMe</code> have the properties of the <code>-Info</code> but provide other methods providing "secret" information that is only
+available in the game to a single player. For example, in <code>PlayerInfoMe</code>, <cdode>getMyTrainHand()</code> returns a <code>TrainHandManagerInfoMe</code> instance that 
+has methods that tell you what's actually in the player's hand. On the other hand, <code>PlayerInfo</code>'s <code>getTrainHand()</code> returns <code>TrainHandManagerInfo</code>, which
+doesn't have a method to actually see the player's hand.
+<h1>Naming Conventions for Parts of the Game</h1>
+The following terms are used consistently to refer to game elements:
+<ul>
+<li>Train: a card with a train on it with a certain color; *NOT* a plastic token put on the board</li>
+<li>Piece: a train piece (used to build routes) put on the board to claim a route</li>
+<li>Route: a single connection between two cities; this is a single color, even though it might have an "alternate" route that it's paired with</li>
+<li>Ticket: a card that gives points for connected two cities</li>
+<li>Network: a grouping of cities and routes that are connected continuously (and which might complete 1 or more tickets that a ticket is completed)
+<li>Path: routes strung together to connect two non-adjacent cities</li>
+<li>Wipe: when all the train cards are removed and replaced because there are 3 loco cards face up 
+</ul>
+<h1>Naming Conventions for Classes/Interfaces</h1>
+<ul>
+<li>-Info: an immutable wrapper that represents a game element or aspect; these are passed to <code>Strategy</code> classes to provide game-state information</li>
+	<li>Info classes *don't* provide any information that is private/secret.</li>
+<li>-InfoMe: similar to -Info classes/interfaces, these classes/interfaces are immutable wrappers, but they provide information that is only available in the game to 
+a specific player</li>
+<li>-Play: a class/interface representing one thing a player may do at the current point in the game</li>
+<li>-Entry: a class generated using JAXB tools which records game-state information for later use (and to be exported to XML)</li>
+<li>-Manager: a class that manages some aspect of a game or a player; used to conveniently break up classes into subparts based on logical functions</li>
+</ul>
+<h1>Miscellaneous Notes</h1>
+<h2>"Wiping"</h2>
+In Ticket to Ride, there are 5 face up train cards. If 3 are locos, the face-ups are all immediately "wiped,"
+meaning they're discarded and 5 new cards are drawn to put face up.
+<p>
+In theory, if there are a lot of loco cards in the deck so that 3 or more locos show up whenever cards are turned over,
+this can happen over and over. The simulator will only do this 5 times, however, before it stops and lets the face-up cards stay empty.
+<p>
+This is a bizarre corner case, though, and so not much time has been spent figuring out what the rules suggest should happen.
+</body>
+</html>

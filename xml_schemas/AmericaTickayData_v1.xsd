@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:include schemaLocation="SimulationLogging.xsd" />
+	<xs:include schemaLocation="TickayGameBase.xsd" />
+
+	<!-- This schema uses existing elements to build a Ticket to Ride America 
+		log of game records. -->
+
+	<xs:complexType name="AmericaSimulationLog">
+		<xs:complexContent>
+			<xs:extension base="SimulationLog">
+				<xs:sequence>
+					<xs:element name="americaGameEntry" type="AmericaGameEntry"
+						maxOccurs="unbounded" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<!-- Distinguishes this as an America game but doesn't actually add any 
+		information to the base class. -->
+	<xs:complexType name="AmericaGameEntry">
+		<xs:complexContent>
+			<xs:extension base="GameEntry">
+				<xs:sequence>
+					<xs:element name="finalScoring" type="FinalScoringEntry"
+						maxOccurs="unbounded" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+</xs:schema>			
+				
+				
+				
+				
+				
+				
+				
+				

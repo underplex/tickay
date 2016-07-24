@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:include schemaLocation="SimulationLogging.xsd" />
+	<xs:include schemaLocation="TickayGameBase.xsd" />
+
+	<!-- This schema uses existing elements to build a Ticket to Ride Europe 
+		log of game records. -->
+
+	<!-- Euro's final scoring includes scoring for stations left... -->
+	<xs:complexType name="EuroFinalScoringEntry">
+		<xs:complexContent>
+			<xs:extension base="FinalScoringEntry">
+				<xs:sequence>
+					<xs:element name="stationPoints" type="xs:int" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="EuroGameEntry">
+		<xs:complexContent>
+			<xs:extension base="GameEntry">
+				<xs:sequence>
+					<xs:element name="stationChoice" type="StationChoiceEntry"
+						minOccurs="0" maxOccurs="unbounded" />
+					<xs:element name="finalScoring" type="EuroFinalScoringEntry"
+						maxOccurs="unbounded" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+		
+	<xs:complexType name="EuroSimulationLog">
+	  	<xs:complexContent>
+	    	<xs:extension base="SimulationLog">
+	      		<xs:sequence>
+	        		<xs:element name="euroGameEntry" type="EuroGameEntry" maxOccurs="unbounded"/>
+	      		</xs:sequence>
+	    	</xs:extension>
+  		</xs:complexContent>
+  	</xs:complexType>
+  	
+  	
+	
+</xs:schema>			
+				
+				
+				
+				
+				
+				
+				
+				

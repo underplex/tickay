@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+	<xs:complexType name="SpecErrorEntry">
+		<xs:sequence>
+			<xs:element name="specClass" type="xs:string" />
+			<xs:element name="specError" type="SpecErrorType" />
+		</xs:sequence>
+	</xs:complexType>
+	
+	<!-- Errors that might be caused by the specification for the simulation being wrong. -->
+	<xs:simpleType name="SpecErrorType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="NUMBER_OF_ITERATIONS"/>
+			<xs:enumeration value="NUMBER_OF_PLAYERS"/>
+			<xs:enumeration value="STRATEGY_ASSIGNMENT"/>
+			<xs:enumeration value="EXPANSIONS"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:complexType name="SimulationLog">
+		<xs:sequence>
+			<xs:element name="dateRun" type="xs:string"/>
+	 		<xs:element name="specClassName" type="xs:string"/>
+	 		<xs:element name="expansions" type="xs:string" />
+			<xs:element name="error" type="SpecErrorEntry" maxOccurs="unbounded" minOccurs="0"/>
+ 		</xs:sequence>
+	</xs:complexType>
+
+</xs:schema>
