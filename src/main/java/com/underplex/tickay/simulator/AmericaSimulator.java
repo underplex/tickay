@@ -49,7 +49,7 @@ public class AmericaSimulator<T extends AmericaStrategy> extends TickaySimulator
 	} // end method
 	
 	/**
-	 * Returns <code>SimulationLog</code> for basic Americape game.
+	 * Returns <code>SimulationLog</code> for basic America game.
 	 * <p>
 	 * Generates errors that are added to returned log if strategies assigned are not <code>AmericaStrategy</code> or if the 
 	 * number of player for a given iteration is < 2 or > 5.

@@ -1,4 +1,10 @@
 Progress_Log
+
+7-31: After putting together simple stats for logs coming from system, issues:
+
+	- I need to redefine "strategy name" everywhere as the strategy name defined by the class itself, so that different strategies with similar parameters
+		are defined.
+
 2-4: Cleaning up Javadoc comments -- doing them for EntryInfo items, did through ClaimPlayEntryInfo.
 Also: Need to check that correct play options are being produced for America and Europe game by PlayFinder. Write test first! Then rewrite code as needed.
 

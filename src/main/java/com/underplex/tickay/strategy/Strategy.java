@@ -62,4 +62,14 @@ public abstract interface Strategy {
 	   * @param	options <code>List</code> of <code>TicketChoicePlayInfo</code>s representing all legal combinations of keeping/returning tickets
 	   */
 	  TicketChoicePlayInfo chooseReturnTickets( GameInfo game, PlayerInfoMe player, List<TicketChoicePlayInfo> options);
+	  
+	  /**
+	   * Returns label that uniquely identifies this strategy, preferably with a brief name.
+	   * 
+	   * Labels are intended to be used for tables that report on strategy outcomes, so it's useful to have labels that identify the strategy but also
+	   * report on major parameters (in case two versions of a strategy vary parameters but use the same class, for example).
+	   * 
+	   * @return
+	   */
+	  String getIdentifier();
 }

@@ -35,7 +35,7 @@ public class DemoMain {
 		AmericaSimulationLog log = sim.run();
 		
 		// the log can now be examined as-is or exported to XML
-		String fileLocation = FileIO.outputFile(log, "C:\\Users\\irvin_000\\workspace\\Tickay\\xml_output\\");
+		String fileLocation = FileIO.outputFile(log, "C:\\Users\\irvin_000\\workspace\\tickay\\xml_output\\");
 		
 		// the XML can be imported back in...
 		SimulationLog outLog = FileIO.inputFile(fileLocation);
@@ -51,7 +51,7 @@ public class DemoMain {
 		EuroSimulator<EuroStrategy> euroSim = new EuroSimulator<EuroStrategy>(euroSpec);
 		EuroSimulationLog eurolog = euroSim.run();
 		
-		fileLocation = FileIO.outputFile(eurolog, "C:\\Users\\irvin_000\\workspace\\Tickay\\xml_output\\");
+		fileLocation = FileIO.outputFile(eurolog, "C:\\Users\\irvin_000\\workspace\\tickay\\xml_output\\");
 		
 		SimulationLog euroLog = FileIO.inputFile(fileLocation);
 		

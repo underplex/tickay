@@ -89,6 +89,7 @@ public class PlayerDefinitionEntry {
     /**
      * Sets the value of the strategyClassName property.
      * 
+     * 
      * @param value
      *     allowed object is
      *     {@link String }

@@ -70,5 +70,9 @@ public class DefaultEuroStrategy implements EuroStrategy {
 			Set<PaymentInfo> paymentOptions) {
 		return Picker.selectRandom( paymentOptions );
 	}
+	
+	public String getIdentifier(){
+		return this.getClass().getSimpleName();
+	}
 
 }

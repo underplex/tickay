@@ -55,5 +55,9 @@ public class DefaultAmericaStrategy implements AmericaStrategy {
 	public TicketChoicePlayInfo chooseReturnTickets(GameInfo game, PlayerInfoMe player, List<TicketChoicePlayInfo> optionsInfo) {
 		return Picker.selectRandom( optionsInfo );
 	}
+	
+	public String getIdentifier(){
+		return this.getClass().getSimpleName();
+	}
 
 }

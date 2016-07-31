@@ -42,10 +42,16 @@
 	    <artifactId>tool</artifactId>
 	    <version>e47c7a1d9f</version>
 	</dependency>
-		<dependency>
+	<dependency>
 	    <groupId>com.github.underplex</groupId>
 	    <artifactId>infowrap</artifactId>
 	    <version>7849caf4bf</version>
+	</dependency>
+	<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-math3 -->
+	<dependency>
+	    <groupId>org.apache.commons</groupId>
+	    <artifactId>commons-math3</artifactId>
+	    <version>3.2</version>
 	</dependency>
   </dependencies>
   <artifactId>tickay</artifactId>

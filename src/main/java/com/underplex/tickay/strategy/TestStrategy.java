@@ -62,6 +62,10 @@ public class TestStrategy implements EuroStrategy {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	public String getIdentifier(){
+		return this.getClass().getSimpleName();
+	}
 
 
 
