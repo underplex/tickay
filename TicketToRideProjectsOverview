@@ -1,0 +1,160 @@
+Summary of Ticket to Ride Projects on GitHub.com
+
+Tickay (github.com/underplex/tickay) is a simulation of Ticket to Ride board game, specifically the America and Europe versions of the game.
+Other projects similar to this are listed below.
+
+https://github.com/ss2cp/AI-TicketToRide
+	Java
+	Great ReadMe
+	Clearly the most developed code base.
+
+https://github.com/ArtificialIntelligenceFall2015/TicketToRide
+	Java
+	No ReadMe
+	Seems to include Player and PlayerAI items.
+	
+https://github.com/codeforamerica/ticket-to-ride
+	Not related to board game at all.
+
+https://github.com/codeforamerica/ticket-to-ride-imports
+	Not related to board game at all.
+
+https://github.com/kingcanova/Ticket-To-Ride
+	No real ReadMe -- seems to be for a class.
+	Maybe for someone to play the game?
+	
+https://github.com/lsjunior/tickettoride
+	No real ReadMe -- doesn't seem related to board game.
+	
+https://github.com/11samype/TicketToRideEurope
+	Java
+	No real ReadMe
+	Implements Europe board game with GUI to either play or simulate, unclear.
+	
+https://github.com/alexsmith93/ticket-to-ride
+	Java
+	No real ReadMe
+	Seems to be fairly straightforward implementation.
+	
+https://github.com/AdemirPasa/ticket-to-ride-illinois
+	Java
+	No real ReadMe
+	For TtR Illinois
+	Seems to be more detailed implementation, possibly worth exploring.
+	
+https://github.com/mannj17/TicketToRideApp
+	Java
+	No ReadMe
+	Seems to be fairly straightforward, unclear.
+	Seems to be way to play game as app.
+	
+https://github.com/RFT-2014-team3/Ticket-to-Ride
+	Java
+	No ReadMe
+	Some unidentified language, straightforward simple model.
+	
+https://github.com/targil123/TicketToRide2
+	Java
+	No ReadMe
+	Model seems fairly well developed but everything is a fat mess structure-wise.
+	
+https://github.com/z-ch/Ticket-to-ride
+	Java
+	Full ReadMe
+	For TtR Netherlands.
+	Seems to be way to play game.
+	
+https://github.com/k05mang/Ticket-to-Ride-Source
+	Java
+	No real ReadMe
+	Seems to be fairly straightforward implementation.
+	
+https://github.com/Regan831/TicketToRide
+	Java
+	Seems to be for a class.
+	ReadMe is not super informative about project.
+	Fairly good implementation, but not structured particularly well.
+	
+https://github.com/naberg14/ticket-to-ride-illinois
+	Java
+	TtR Illinois
+	Fairly straightforward implementation.
+	
+https://github.com/Scacciotti/TicketToRide
+	Java
+	No ReadMe
+	Maybe an app?
+	
+https://github.com/NeilDevine/Ticket-to-Ride-UK
+	Java
+	ReadMe is mostly about game rules
+	Seems to be way to play the game?
+	Not in-depth.
+	
+https://github.com/buckyoung/Ticket2Score
+	Java
+	Score-keeping app.
+	
+https://github.com/cl05tomp/siena-oop-ticket-to-ride
+	Java
+	Straightforward representation of game, somewhere between simple and complex.
+	
+https://github.com/Arcessimus/TicketToRide_CSSE376
+	Java
+	no ReadMe
+	fairly well developed, files organized
+	maybe has GUI?
+	
+https://github.com/dead-alus/HW5---Ticket-To-RIde
+	Java
+	no ReadMe
+	not clear where to start -- organization not great
+	
+https://github.com/jschiff/tickettorideanalysis
+	Java
+	no ReadMe
+	simple game representation
+	
+https://github.com/kwmorris/TtR-Calc
+	Java
+	no ReadMe
+	seems to be a calculator app of some sort, maybe for scoring?
+	
+https://github.com/peterhuang913/TTRScorer
+	Java
+	scoring app
+	
+https://github.com/cooijmanstim/hobo
+	Java
+	cute title!
+	no ReadMe
+	
+https://github.com/hoboris/RailRoadie
+	Java
+	"adaptation" of Ticket to Ride
+	seems to be fully realized, though
+	
+https://github.com/cmark89/blaine
+	Java
+	no ReadMe
+	straightforward implementation
+	
+https://github.com/dsample/ttr-scoreboard-android
+	Java
+	scoring app
+	
+https://github.com/Blackdread/LO43_UTBM
+	Java
+	ReadMe not super informative
+	seems to be full on project, well developed, though I can't find the class files that really drive it	
+
+
+
+	
+	
+
+		
+
+	
+	
+
