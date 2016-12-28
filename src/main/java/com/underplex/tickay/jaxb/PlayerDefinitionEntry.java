@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="playerType" type="{}PlayerType"/>
- *         &lt;element name="strategyClassName" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="strategyIdentifier" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="strategyToString" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -38,7 +38,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "PlayerDefinitionEntry", propOrder = {
     "playerType",
-    "strategyClassName",
+    "strategyIdentifier",
     "strategyToString"
 })
 public class PlayerDefinitionEntry {
@@ -46,7 +46,7 @@ public class PlayerDefinitionEntry {
     @XmlElement(required = true)
     protected PlayerType playerType;
     @XmlElement(required = true)
-    protected String strategyClassName;
+    protected String strategyIdentifier;
     @XmlElement(required = true)
     protected String strategyToString;
 
@@ -75,19 +75,19 @@ public class PlayerDefinitionEntry {
     }
 
     /**
-     * Gets the value of the strategyClassName property.
+     * Gets the value of the strategyIdentifier property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getStrategyClassName() {
-        return strategyClassName;
+    public String getStrategyIdentifier() {
+        return strategyIdentifier;
     }
 
     /**
-     * Sets the value of the strategyClassName property.
+     * Sets the value of the strategyIdentifier property.
      * 
      * 
      * @param value
@@ -95,8 +95,8 @@ public class PlayerDefinitionEntry {
      *     {@link String }
      *     
      */
-    public void setStrategyClassName(String value) {
-        this.strategyClassName = value;
+    public void setStrategyIdentifier(String value) {
+        this.strategyIdentifier = value;
     }
 
     /**

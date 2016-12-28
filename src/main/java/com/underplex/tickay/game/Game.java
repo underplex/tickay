@@ -88,7 +88,7 @@ public abstract class Game {
 		for (Player player: players.turnOrder() ){
 			definitionEntry = new PlayerDefinitionEntry();
 			definitionEntry.setPlayerType( player.getPlayerType() );
-			definitionEntry.setStrategyClassName( player.getStrategy().getIdentifier() );
+			definitionEntry.setStrategyIdentifier( player.getStrategy().getIdentifier() );
 			definitionEntry.setStrategyToString( player.getStrategy().toString() );
 			definitions.add( definitionEntry );
 			

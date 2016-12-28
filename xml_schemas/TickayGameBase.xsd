@@ -264,7 +264,7 @@
 			<xs:element name="playerType" type="PlayerType" />
 			 <!-- Remember PlayerType also defines where someone sits. That's the definition 
 				of who they are in the game.-->
-			<xs:element name="strategyClassName" type="xs:string"/>
+			<xs:element name="strategyIdentifier" type="xs:string"/>
 			<xs:element name="strategyToString" type="xs:string"/> <!-- Description of the strategy. -->
 		</xs:sequence>
 	</xs:complexType>

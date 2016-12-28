@@ -36,7 +36,7 @@ public class Scorer {
 		Set<String> names = new HashSet<>();
 		for (GameEntry ge : entries)
 			for (PlayerDefinitionEntry pde : ge.getSetup().getPlayerDefinition())
-				names.add(pde.getStrategyClassName());
+				names.add(pde.getStrategyIdentifier());
 		return names;
 	}
 
