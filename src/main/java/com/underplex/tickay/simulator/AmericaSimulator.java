@@ -91,9 +91,9 @@ public class AmericaSimulator<T extends AmericaStrategy> extends TickaySimulator
 				}
 			}
 		
-			AmericaGame euroGame = new AmericaGame( strats, expansions );
+			AmericaGame amerGame = new AmericaGame( strats, expansions );
 			
-			rLog.getAmericaGameEntry().add( euroGame.run() );
+			rLog.getAmericaGameEntry().add( amerGame.run() );
 		}
 		return rLog;
 	}

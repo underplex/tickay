@@ -52,7 +52,7 @@ public class FileIO {
 			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
 			jaxbMarshaller.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, true );
 			jaxbMarshaller.marshal( log, new File( fileLocation ) );
-			jaxbMarshaller.marshal( log, System.out );
+			// jaxbMarshaller.marshal( log, System.out );
 			System.out.println("JAXB xml output succeeded.");
 			rString = fileLocation;
 		} catch ( JAXBException e ) {

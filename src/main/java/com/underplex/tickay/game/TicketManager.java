@@ -30,7 +30,7 @@ public class TicketManager implements InfoSource<TicketManagerInfo> {
 		this.oblivion = new ArrayList<Ticket>();
 		this.managerInfo = new TicketManagerInfo(this);
 		
-		System.out.println( expansions.toUpperCase() );
+		// System.out.println( expansions.toUpperCase() );
 		
 		if ( expansions.toUpperCase().contains( "EUROPE" ) ){
 			this.longs.addAll( TicketFactory.makeEuropeLongs( cities ) );
@@ -42,7 +42,7 @@ public class TicketManager implements InfoSource<TicketManagerInfo> {
 			Collections.shuffle( this.shorts );
 		}
 		
-		System.out.println( "after check of expansions..." );
+		//System.out.println( "after check of expansions..." );
 	}
 
 	public Game getGame() {

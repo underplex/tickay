@@ -5,7 +5,6 @@
 // Generated on: 2016.01.21 at 12:18:56 PM EST 
 //
 
-
 package com.underplex.tickay.jaxb;
 
 import java.util.ArrayList;
